@@ -5,12 +5,52 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Vista General</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            Buscar usuario: <h:inputText value="#{BusquedaBean.busqueda}"/>
+            <h:commandButton value="Buscar" action="#{BusquedaBean.buscar()}"/>
+        </h:form>
+        
+        <h:dataTable value="#{busquedaBean.listaResultado}" var="lista"
+            
+            <h:column>
+                <!-- column header -->
+                <f:facet name="header">Nombre</f:facet>
+                <!-- row record -->
+                #{lista.getNombre}
+            </h:column>
+                
+            <h:column>
+                <f:facet name="header">ver</f:facet>
+    		Ver
+            </h:column>
+                
+            <h:column>
+                <f:facet name="header">editar</f:facet>
+    		Editar
+            </h:column>
+                
+            <h:column>
+                <f:facet name="header">a</f:facet>
+    		a
+            </h:column>
+                
+        </h:dataTable>
+    </h:body>
 </html>
