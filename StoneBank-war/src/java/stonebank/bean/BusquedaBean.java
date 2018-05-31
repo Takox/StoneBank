@@ -5,11 +5,12 @@
  */
 package stonebank.bean;
 
-import java.util.LinkedList;
+import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 import stonebank.ejb.TusuarioFacade;
 import stonebank.entity.Tusuario;
 
@@ -18,24 +19,53 @@ import stonebank.entity.Tusuario;
  * @author Victor
  */
 @Named(value = "busquedaBean")
-@Dependent
-public class BusquedaBean {
+@SessionScoped
+public class BusquedaBean implements Serializable{
 
     @EJB
     private TusuarioFacade tusuarioFacade;
     private String busqueda;
-    public List<Tusuario> listaResultado;
+    private List<Tusuario> listaResultado;
     
+    @PostConstruct
+    public void init(){
+        busqueda = "";
+        listaResultado = tusuarioFacade.findAll();
+    }
     
     /**
      * Creates a new instance of BusquedaBean
      */
     public BusquedaBean() {
-        busqueda = "";
-        listaResultado = new LinkedList<>();
+        
     }
     
-    public void Buscar(){
-        listaResultado = tusuarioFacade.buscarTUsuarioPorNombre(busqueda);
+    public String buscar(){
+        setListaResultado(tusuarioFacade.buscarTUsuarioPorNombre(busqueda));
+        return "indexEmpleadoBusqueda";
+    }
+
+    public TusuarioFacade getTusuarioFacade() {
+        return tusuarioFacade;
+    }
+
+    public void setTusuarioFacade(TusuarioFacade tusuarioFacade) {
+        this.tusuarioFacade = tusuarioFacade;
+    }
+
+    public List<Tusuario> getListaResultado() {
+        return listaResultado;
+    }
+
+    public void setListaResultado(List<Tusuario> listaResultado) {
+        this.listaResultado = listaResultado;
+    }
+
+    public String getBusqueda() {
+        return busqueda;
+    }
+    
+    public void setBusqueda(String b){
+        busqueda = b;
     }
 }
