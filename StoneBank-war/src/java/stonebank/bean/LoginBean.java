@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import stonebank.ejb.TusuarioFacade;
 import stonebank.entity.Trol;
 import stonebank.entity.Tusuario;
@@ -18,7 +20,7 @@ import stonebank.utils.PassUtil;
 
 /**
  *
- * @author Victor
+ * @author Fran Gambero
  */
 @Named(value = "loginBean")
 @SessionScoped
@@ -27,6 +29,9 @@ public class LoginBean implements Serializable{
     @EJB
     private TusuarioFacade tusuarioFacade;
 
+    @Inject
+    private ExitoErrorBean exitoErrorBean;
+    
     protected Tusuario usuarioLoggeado;
     protected int dniLogin;
     protected String passwordLogin = "";
@@ -70,24 +75,37 @@ public class LoginBean implements Serializable{
         if(contrasenaHash.equalsIgnoreCase(usuarioLoggeado.getHashContrasena())){
             //Comprobamos el rol del usuario
             if(usuarioLoggeado.getTrolIdtrol().equals(rolUsuario)){
-                return "/usuario/indexUsuario";
+                
+                exitoErrorBean.setMensajeExito("Login usuario correcto");
+                exitoErrorBean.setProximaURL("/usuario/indexUsuario");
+                return "/exito";
+                //return "/usuario/indexUsuario";
             } else if (usuarioLoggeado.getTrolIdtrol().equals(rolEmpleado)){
-                return "/empleado/indexEmpleado";
+                exitoErrorBean.setMensajeExito("Login empleado correcto");
+                exitoErrorBean.setProximaURL("/empleado/indexEmpleadoBusqueda");
+                return "/exito";
+                //return "/empleado/indexEmpleado";
             }
         } 
         
-        return "error"; //Redirige a error si no lo ha hecho antes
+        exitoErrorBean.setMensajeError("Error al iniciar sesión");
+        exitoErrorBean.setProximaURL("/login");
+        return "/error"; //Redirige a error si no lo ha hecho antes
         
     }
-    
+      
     public String doCerrarSesion(){
         
-        return "login";
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        
+        exitoErrorBean.setMensajeExito("Sesión cerrada con éxito");
+        exitoErrorBean.setProximaURL("/login");
+        return "/exito";
     }
     
     @PostConstruct
     public void init(){
-        if(dniLogin != 1){
+        if(dniLogin != -1){
             usuarioLoggeado = this.tusuarioFacade.find(dniLogin);
         }
     }
