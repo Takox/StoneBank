@@ -47,13 +47,10 @@ and open the template in the editor.
             </h:column>
 
             <h:column>
-                <f:facet name="header"></f:facet>
-                <h:link value="Ver" outcome="usuarioSeleccionado" />
+                <h:commandButton action="#{usuarioBean.usuarioSeleccionado(usuario.dniUsuario)}" value="ver" />
             </h:column>
-                
             <h:column>
-                <f:facet name="header">editar</f:facet>
-    		<h:link value="Editar" outcome="gestionarUsuario" />
+                <h:commandButton action="#{usuarioBean.gestionarUsuario(usuario.dniUsuario)}" value="Configurar"/>
             </h:column>
                 
         </h:dataTable>
