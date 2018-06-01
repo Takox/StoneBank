@@ -12,6 +12,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import stonebank.ejb.TusuarioFacade;
 import stonebank.entity.Trol;
 import stonebank.entity.Tusuario;
@@ -19,7 +20,7 @@ import stonebank.utils.PassUtil;
 
 /**
  *
- * @author Victor
+ * @author Fran Gambero
  */
 @Named(value = "loginBean")
 @SessionScoped
@@ -28,9 +29,13 @@ public class LoginBean implements Serializable{
     @EJB
     private TusuarioFacade tusuarioFacade;
 
+    @Inject
+    private ExitoBean exitoBean;
+    
     protected Tusuario usuarioLoggeado;
     protected int dniLogin;
     protected String passwordLogin = "";
+    protected String mensajeExito, url;
     Trol rolUsuario = new Trol(1);
     Trol rolEmpleado = new Trol(2);   
     
@@ -71,13 +76,19 @@ public class LoginBean implements Serializable{
         if(contrasenaHash.equalsIgnoreCase(usuarioLoggeado.getHashContrasena())){
             //Comprobamos el rol del usuario
             if(usuarioLoggeado.getTrolIdtrol().equals(rolUsuario)){
-                return "/usuario/indexUsuario";
+                
+                exitoBean.setMensajeExito("Login correcto");
+                exitoBean.setProximaURL("/usuario/indexUsuario");
+                return "/exito";
+                //return "/usuario/indexUsuario";
             } else if (usuarioLoggeado.getTrolIdtrol().equals(rolEmpleado)){
                 return "/empleado/indexEmpleado";
             }
         } 
         
-        return "error"; //Redirige a error si no lo ha hecho antes
+        exitoBean.setMensajeError("Error al iniciar sesión");
+        exitoBean.setProximaURL("/login");
+        return "/error"; //Redirige a error si no lo ha hecho antes
         
     }
       
@@ -91,7 +102,7 @@ public class LoginBean implements Serializable{
     
     @PostConstruct
     public void init(){
-        if(dniLogin != 1){
+        if(dniLogin != -1){
             usuarioLoggeado = this.tusuarioFacade.find(dniLogin);
         }
     }
