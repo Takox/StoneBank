@@ -79,7 +79,7 @@ public class UsuarioBean {
     public void setUsuario(Tusuario usuario) {
         this.usuario = usuario;
     }
-    
+  
     public void setSaldo(double saldo){
         this.saldo = saldo;
     }
@@ -234,8 +234,7 @@ public class UsuarioBean {
                 restaurar();
                 return "configuracion";//esto se deberia de cambiar o mostrar un mensaje de error
         }
-        
-        
+               
     }
     
     public String crearUsuario(){
@@ -294,8 +293,7 @@ public class UsuarioBean {
         }
         
     }
-    
-    
+        
     private void restaurar(){
         nuevoNombre=usuario.getNombre();
         nuevoApellido=usuario.getApellidos();
@@ -407,6 +405,7 @@ public class UsuarioBean {
                 if(nuevaContrasena.equals(seguroContrasena)){
                     usuarioSeleccionado.setHashContrasena(PassUtil.generarHash(nuevaContrasena));
                     this.tusuarioFacade.edit(usuarioSeleccionado);
+
                     return "/empleado/indexEmpleadoBusqueda";
                 }else{
                     restaurar();
@@ -414,6 +413,7 @@ public class UsuarioBean {
                 }
             } 
             this.tusuarioFacade.edit(usuarioSeleccionado);
+
             return "/empleado/indexEmpleadoBusqueda";
         }else{
                 return "/empleado/gestionarUsuario";//esto se deberia de cambiar o mostrar un mensaje de error
