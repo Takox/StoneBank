@@ -1,5 +1,6 @@
 package stonebank.bean;
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.time.Clock;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.inject.Inject;
 import stonebank.ejb.TmovimientoFacade;
@@ -23,8 +25,10 @@ import stonebank.utils.*;
  * @author Victor
  */
 @Named(value = "usuarioBean")
-@RequestScoped
-public class UsuarioBean {
+@SessionScoped
+public class UsuarioBean implements Serializable {
+
+
 
     @EJB
     private TtransferenciaFacade ttransferenciaFacade;
@@ -32,6 +36,8 @@ public class UsuarioBean {
     @EJB
     private TmovimientoFacade tmovimientoFacade;
 
+    
+    
     @Inject
     protected LoginBean loginBean;
 
@@ -52,9 +58,16 @@ public class UsuarioBean {
     protected Integer nuevoTelefono, nuevoDNI;
     protected double saldo;
 
+    
+    protected List<Tusuario> listaUsuario; 
+    
+  
+
     /**
      * Creates a new instance of UsuarioBean
      */
+    
+    
     public UsuarioBean() {
     }
 
@@ -72,6 +85,12 @@ public class UsuarioBean {
     /*
     * hace falta poner el saldo que tiene justo aqui.
      */
+    
+    
+    public Tusuario getUsuarioPorDNI(Integer dniUsuario){
+        return tusuarioFacade.find(dniUsuario);
+    }
+    
     public Tusuario getUsuario() {
         return usuario;
     }
@@ -383,6 +402,12 @@ public class UsuarioBean {
     }
 
     public String usuarioSeleccionado(Integer usuarioSeleccionadoDNI) {
+        seleccionarUsuario(usuarioSeleccionadoDNI);
+
+        return "usuarioSeleccionado";
+    }
+    
+    public void seleccionarUsuario(Integer usuarioSeleccionadoDNI){
         Tusuario usuarioSeleccionado = this.tusuarioFacade.find(usuarioSeleccionadoDNI);
         nuevoDNI = usuarioSeleccionadoDNI;
         nuevoNombre = usuarioSeleccionado.getNombre();
@@ -390,8 +415,6 @@ public class UsuarioBean {
         nuevoDomicilio = usuarioSeleccionado.getDomicilio();
         nuevoEmail = usuarioSeleccionado.getEmail();
         nuevoTelefono = usuarioSeleccionado.getTelefono();
-
-        return "/empleado/usuarioSeleccionado";
     }
 
     public List<Tmovimiento> getListaMovimientoUsuarioSeleccionado(Integer usuarioSeleccionadoDNI) {
