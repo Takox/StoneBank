@@ -16,11 +16,12 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
+        <f:view locale="#{localeBean.currentLocale}">
         <ui:include src="../headerEmpleadoUsuarioSeleccionado.xhtml"/>
         <b:container fluid="true">
             <b:row>
                 <b:column span="6">
-                    <h1>Datos de #{usuarioBean.nuevoNombre} #{usuarioBean.nuevoApellido}</h1>
+                    <h1>#{msgs.datosde} #{usuarioBean.nuevoNombre} #{usuarioBean.nuevoApellido}</h1>
                 </b:column>
             </b:row>
             <br></br>
@@ -37,7 +38,7 @@ and open the template in the editor.
                 </b:row>
                 <b:row>
                     <b:column span="1" offset="0">
-                        <h>Nombre: </h>
+                        <h>#{msgs.nombre}: </h>
                     </b:column>
                     <b:column span="1">
                         #{usuarioBean.nuevoNombre}
@@ -45,7 +46,7 @@ and open the template in the editor.
                 </b:row>
                 <b:row>
                     <b:column span="1" offset="0">
-                        <h>Apellidos: </h>
+                        <h>#{msgs.apellidos}: </h>
                     </b:column>
                     <b:column span="2">
                         #{usuarioBean.nuevoApellido}
@@ -54,7 +55,7 @@ and open the template in the editor.
 
                 <b:row>
                     <b:column span="1" offset="0">
-                        <h>Teléfono: </h>
+                        <h>#{msgs.telefono}: </h>
                     </b:column>
                     <b:column span="1">
                         #{usuarioBean.nuevoTelefono}
@@ -62,7 +63,7 @@ and open the template in the editor.
                 </b:row>
                 <b:row>
                     <b:column span="1" offset="0">
-                        <h>Domicilio: </h>
+                        <h>#{msgs.domicilio}: </h>
                     </b:column>
                     <b:column span="2">
                         #{usuarioBean.nuevoDomicilio}
@@ -164,6 +165,6 @@ and open the template in the editor.
             </b:panel>
 
         </h:form>
-
+        </f:view>
     </h:body>
 </html>
